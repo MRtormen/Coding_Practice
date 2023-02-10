@@ -7,36 +7,37 @@ class VigenereCipher(object):
         self.alphabet = alphabet
         self.keylen = len(key)
         self.alphabetlen = len(alphabet)
+        self.output = ""
+        self.n = 0 # Will be used to find the current key iteration for each character to encrypt
+
+    def get_values(self, i):
+        # Find alphabet index of letter to encode
+        m = self.alphabet.index(i) 
+        # Get alphabet index of current key iteration
+        k = self.alphabet.index(self.key[self.n % self.keylen])
+        return m, k
 
     def encode(self, text):
-        n = 0
-        output = ""
         for i in text:
             if i in self.alphabet:
-                k = self.alphabet.index(self.key[n % self.keylen]) #get current key iteration
-                m = self.alphabet.index(i) #find index of letter to encode
-                c = (m + k) % self.alphabetlen #encode letter
-                output += self.alphabet[c] #concatenate encoded letter to output
-                n += 1
+                m, k = self.get_values(i)
+                c = (m + k) % self.alphabetlen # Encode letter
+                self.output += self.alphabet[c] # Add encoded letter to output string
             else:
-                output += i
-                n += 1
-        return output
+                self.output += i
+            self.n += 1
+        return self.output
 
     def decode(self, text):
-        n = 0
-        output = ""
         for i in text:
             if i in self.alphabet:
-                k = self.alphabet.index(self.key[n % self.keylen]) #get current key iteration
-                m = self.alphabet.index(i) #find index of letter to decode
-                c = (m - k) % self.alphabetlen #decode letter
-                output += self.alphabet[c]
-                n += 1
+                m, k = self.get_values(i)
+                c = (m - k) % self.alphabetlen # Decode letter
+                self.output += self.alphabet[c] # Add decoded letter to output string
             else:
-                output += i
-                n += 1
-        return output
+                self.output += i
+            self.n += 1
+        return self.output
 
 def get_text(file):
     if file:
@@ -51,7 +52,7 @@ def get_text(file):
 @click.option("--mode", "-m", type=click.Choice(["e", "d"]), required=True, help="Choose mode, encode/decode")
 def main(key, file, mode):
     """
-    Tool to encrypt and decrypt Vinegere.
+    Tool to encode and decode Vinegere.
     """
     abc = "abcdefghijklmnopqrstuvwxyz"
     cipher = VigenereCipher(key, abc)
