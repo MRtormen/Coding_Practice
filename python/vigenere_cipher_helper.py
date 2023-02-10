@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import click
 
 class VigenereCipher(object):
     def __init__(self, key, alphabet):
@@ -37,8 +38,29 @@ class VigenereCipher(object):
                 n += 1
         return output
 
-def main():
-    pass
+def get_text(file):
+    if file:
+        text = open(file, "r").read()
+    else:
+        text = input("Input text: ")
+    return text.replace(" ", "").lower()
+
+@click.command()
+@click.option("--file", "-f", help="Path to file")
+@click.option("--key", "-k", required=True, help="Key to use for encoding/decoding")
+@click.option("--mode", "-m", type=click.Choice(["e", "d"]), required=True, help="Choose mode, encode/decode")
+def main(key, file, mode):
+    """
+    Tool to encrypt and decrypt Vinegere.
+    """
+    abc = "abcdefghijklmnopqrstuvwxyz"
+    cipher = VigenereCipher(key, abc)
+    text = get_text(file)
+    if mode == 'e':
+        output_text = cipher.encode(text)
+    else:
+        output_text = cipher.decode(text)
+    click.echo(output_text)
 
 if __name__=="__main__":
     main()
