@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import sys 
 
 def parse_int(string):
     string = string.replace("-", " ")
@@ -25,3 +26,17 @@ def parse_int(string):
             n = 0
     total += n
     return total
+
+def main():
+    if (args_count := len(sys.argv)) > 2: # Check if more than one argument was provided
+        print(f"One argument expected, got {args_count - 1}")
+        raise SystemExit(2)
+    elif args_count < 2 or sys.argv[1].isdigit(): # Check if one string argument was provided
+        print("Provide string representation of an integer, e.g. twenty-two")
+        raise SystemExit(2)
+
+    parsed_int = parse_int(sys.argv[1])
+    print(parsed_int)
+
+if __name__=="__main__":
+    main()
