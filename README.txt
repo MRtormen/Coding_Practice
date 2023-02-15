@@ -1,1 +1,1 @@
-This is repository for my coding practice
+This is a repository for my coding practice
