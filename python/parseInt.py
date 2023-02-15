@@ -24,6 +24,9 @@ def parse_int(string):
             else:
                 total += x
             n = 0
+        else: # Word not in dictionary or exeeds max value
+            print(f"Can't parse {word}, check spelling (max value is 1 million).")
+            raise SystemExit(2)
     total += n
     return total
 
@@ -36,6 +39,9 @@ def main():
         raise SystemExit(2)
 
     parsed_int = parse_int(sys.argv[1])
+    if parsed_int > 1000000:
+        print("Max value supported is 1 million")
+        raise SystemExit(2)
     print(parsed_int)
 
 if __name__=="__main__":
