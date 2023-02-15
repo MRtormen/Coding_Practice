@@ -13,6 +13,8 @@ def parse_int(string):
     total = 0
     n = 0
     for word in list:
+        if word == "and":
+            continue
         if word in small_numbers:
             n += small_numbers[word]
         elif word in big_numbers:
